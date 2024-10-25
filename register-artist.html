@@ -103,8 +103,9 @@
       <div class="container" data-aos="fade-up">
         
         <div class="row">
-          <div class="col-lg-8 col-12 px-5">
-            <img class="form-illustration" src = "./assets/img/form-steps/basic_details.jpg" />
+          <div id="steps-form-illustration" class="col-lg-8 col-12 px-5">
+            <h1 id="form-steps-indicator" class="mt-3">Step 1 / 4</h1>
+            <!-- <img class="form-illustration" src = "./assets/img/form-steps/basic_details.jpg" /> -->
           </div>
           <div class="col-lg-4 col-12 mt-5 mt-lg-0">
             <form>
@@ -182,7 +183,7 @@
                 <p id="messageContact" class="text-danger"></p>
 
                 <div class="d-flex justify-content-between mt-3">
-                  <button onclick="buttonActions('basic_details','contact_details')" type="button" class="btn btn-secondary">Back</button>
+                  <button onclick="buttonActions('basic_details','contact_details',true)" type="button" class="btn btn-secondary">Back</button>
                   <button onclick="buttonActions('residential_details','contact_details')" type="button" class="btn btn-primary">Next</button>
                 </div>
 
@@ -221,7 +222,7 @@
                 <p id="messageResidential" class="text-danger"></p>
 
                 <div class="d-flex justify-content-between mt-3">
-                  <button onclick="buttonActions('contact_details','residential_details')" type="button" class="btn btn-secondary">Back</button>
+                  <button onclick="buttonActions('contact_details','residential_details',true)" type="button" class="btn btn-secondary">Back</button>
                   <button onclick="buttonActions('participation_details','residential_details')" type="button" class="btn btn-primary">Next</button>
                 </div>
 
@@ -236,7 +237,7 @@
                   <select id="candPartType" name="candPartType" class="form-select">
                     <option value="-999">Select Participation Type</option>
                     <option value="student">Student</option>
-                    <option value="nonStudent">Non - Student</option>
+                    <option value="non-student">Non - Student</option>
                   </select>
                 </div>
 
@@ -266,17 +267,63 @@
                   <input disabled type="number" class="form-control" name="candTotalAmount" id="candTotalAmount" placeholder="0.00">
                 </div>
 
+                <div class="form-group mt-3">
+                  <label for="candUtrNumber">UTR Number</label> 
+                  <!-- <button type="button" class="btn info-tooltip" data-toggle="tooltip"
+                    data-placement="top" title="After making the payment, please enter the 12-digit UTR (Unique Transaction Reference) number below."> ?
+                  </button> -->
+                  <input type="text" class="form-control" name="candUtrNumber" id="candUtrNumber" placeholder="">
+                </div>
+
                 <button type="button" id="calculateBtn" class="btn btn-success w-100 mt-3 d-none">Calculate</button>
                 <p id="messageBox" class="text-danger"></p>
+
+                <div class="alert alert-secondary mt-3" role="alert">
+                  After making the payment, please enter the 12-digit UTR (Unique Transaction Reference) number in the field.
+                </div>
+              
                 <div class="d-flex justify-content-between mt-3">
-                  <button onclick="buttonActions('residential_details','participation_details')" type="button" class="btn btn-secondary">Back</button>
-                  <button id="finalPayBtn" type="button" class="btn btn-primary" disabled>Pay</button>
+                  <button onclick="buttonActions('residential_details','participation_details',true)" type="button" class="btn btn-secondary">Back</button>
+                  <button id="finalPayBtn" type="button" class="btn btn-primary" disabled>Register</button>
                 </div>
 
               </fieldset>
 
             </form>
-  
+            
+            <div id="success-result" class="row w-100 p-2 d-none">
+              <div class="col-12 d-flex justify-content-center">
+                <img class="register-result" src="./assets/img/form-steps/register_success.png" />
+              </div>
+              <div class="col-12">
+                <p class="text-success text-center py-5">
+                  Thank you for registering with us. 
+                  Once your details are verified, you will receive a 
+                  confirmation email. Please check your inbox, and if 
+                  you don't see it there, be sure to check your spam 
+                  or junk folder.
+                </p>
+              </div>
+              <div class="d-flex justify-content-around">
+                <button onclick="goToPage('./index.html')" type="button" class="btn btn-success"><i class="bi bi-house"></i> Home Page</button>
+                <button onclick="goToPage('./register-artist.html')" type="button" class="btn btn-primary"><i class="bi bi-plus-square"></i> Add New Entry</button>
+              </div>
+            </div>
+
+            <div id="failure-result" class="row w-100 p-2 d-none">
+              <div class="col-12 d-flex justify-content-center">
+                <img class="register-result" src="./assets/img/form-steps/register_cancel.png" />
+              </div>
+              <div class="col-12">
+                <p class="text-danger text-center py-5">
+                  We're currently experiencing some technical difficulties. Please try again later. We apologize for the inconvenience and appreciate your patience.
+                </p>
+              </div>
+              <div class="d-flex justify-content-around">
+                <button onclick="goToPage('./index.html')" type="button" class="btn btn-success"><i class="bi bi-house"></i> Home Page</button>
+                <button onclick="goToPage('./register-artist.html')" type="button" class="btn btn-danger"><i class="bi bi-arrow-clockwise"></i> Try Again!</button>
+              </div>
+            </div>
           </div>
         </div>
          
@@ -376,6 +423,7 @@
 
   <!-- Main JS File -->
   <script src="assets/js/main.js"></script>
+  <script src="assets/js/register.js"></script>
   <script src="assets/js/cities.js"></script>
   <script language="javascript">print_state("candAddressState");</script>
 
