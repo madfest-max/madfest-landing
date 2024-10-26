@@ -172,7 +172,8 @@
 
                 <div class="form-group mt-3">
                   <label for="candInstagram">Instagram ID</label>
-                  <input type="text" class="form-control" name="candInstagram" id="candInstagram" placeholder="https://www.instagram.com/john_doe">
+                  <!-- <input type="text" class="form-control" name="candInstagram" id="candInstagram" placeholder="https://www.instagram.com/john_doe"> -->
+                  <input type="text" class="form-control" name="candInstagram" id="candInstagram" placeholder="john_doe">
                 </div>
 
                 <div class="form-group mt-3">
@@ -193,14 +194,15 @@
                 <legend>Residential Details</legend>
                 <hr />
 
-                <div class="form-group">
+                <div class="form-group d-none">
                   <label for="candAddressLine">Address Line</label>
-                  <textarea type="text" class="form-control" name="candAddressLine" id="candAddressLine" placeholder="" ></textarea>
+                  <textarea type="text" class="form-control" name="candAddressLine" id="candAddressLine" placeholder="" >NaN</textarea>
                 </div>
 
                 <div class="form-group mt-3">
                   <label for="candAddressState">State</label>
                   <select onchange="print_city('candAddressDistrict', this.selectedIndex);" id="candAddressState" name="candAddressState" class="form-select">
+                    <option value="-999">Select State</option>
                   </select>
                 </div>
 
@@ -208,9 +210,6 @@
                   <label for="candAddressDistrict">District</label>
                   <select id="candAddressDistrict" name="candAddressDistrict" class="form-select">
                     <option value="-999">Select District</option>
-                    <option value="1">Male</option>
-                    <option value="0">Female</option>
-                    <option value="2">Other</option>
                   </select>
                 </div>
 
@@ -236,6 +235,7 @@
                   <label for="candPartType">Participation Type</label>
                   <select id="candPartType" name="candPartType" class="form-select">
                     <option value="-999">Select Participation Type</option>
+                    <option value="kids">Kids</option>
                     <option value="student">Student</option>
                     <option value="non-student">Non - Student</option>
                   </select>
@@ -267,18 +267,18 @@
                   <input disabled type="number" class="form-control" name="candTotalAmount" id="candTotalAmount" placeholder="0.00">
                 </div>
 
-                <div class="form-group mt-3">
+                <div class="form-group mt-3 d-none">
                   <label for="candUtrNumber">UTR Number</label> 
                   <!-- <button type="button" class="btn info-tooltip" data-toggle="tooltip"
                     data-placement="top" title="After making the payment, please enter the 12-digit UTR (Unique Transaction Reference) number below."> ?
                   </button> -->
-                  <input type="text" class="form-control" name="candUtrNumber" id="candUtrNumber" placeholder="">
+                  <input value="NaN" type="text" class="form-control" name="candUtrNumber" id="candUtrNumber" placeholder="">
                 </div>
 
                 <button type="button" id="calculateBtn" class="btn btn-success w-100 mt-3 d-none">Calculate</button>
                 <p id="messageBox" class="text-danger"></p>
 
-                <div class="alert alert-secondary mt-3" role="alert">
+                <div class="alert alert-secondary mt-3 d-none" role="alert">
                   After making the payment, please enter the 12-digit UTR (Unique Transaction Reference) number in the field.
                 </div>
               

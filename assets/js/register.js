@@ -106,10 +106,10 @@
   
     let utrValue = document.getElementById("candUtrNumber").value
 
-    if(utrValue == "" || !utrRegex.test(utrValue)){
-      showErrorMsg("Enter a valid utr number",false)
-      return;
-    }
+    // if(utrValue == "" || !utrRegex.test(utrValue)){
+    //   showErrorMsg("Enter a valid utr number",false)
+    //   return;
+    // }
 
     let allValuesJson = gatherAllForm()
     // console.log("all:",allValuesJson)
@@ -171,9 +171,58 @@
     }
   }
 
+  function kidsAgeCheck(){
+    
+    let dobValue = document.getElementById("candDob").value
+
+    if(!dobValue){
+        return false
+    }
+
+    // Create two Date objects
+    var startDate = new Date(dobValue);
+    var endDate = new Date();
+
+    // Calculate the difference in years
+    var diffInYears = endDate.getFullYear() - startDate.getFullYear();
+
+    // Adjust for the case where the end date is before the start date's month and day
+    if (endDate.getMonth() < startDate.getMonth() || 
+        (endDate.getMonth() === startDate.getMonth() && endDate.getDate() < startDate.getDate())) {
+        diffInYears--;
+    }
+
+    console.log('Kids Check ' + diffInYears);
+    if(diffInYears>=3 && diffInYears<12){
+        return true;
+    }else{
+        return false;
+    }
+  }
+
+  function ticketTypeAmount(candType){
+
+    let ticketPrice = 0;
+
+    switch(candType){
+        case "kids":
+            ticketPrice = 0;
+            break;
+        case "student":
+            ticketPrice = 100;
+            break;
+        case "non-student":
+            ticketPrice = 200;
+            break;
+    }
+
+    return ticketPrice;
+
+  }
+
   function displayTotalCost(candType,candCount,candCategory){
 
-    let ticketAmt = candType==="student"?100:200;
+    let ticketAmt = ticketTypeAmount(candType)
 
     let ticketPrice = ticketAmt * candCount * candCategory;
     document.getElementById("candTotalAmount").value = ticketPrice
@@ -188,7 +237,13 @@
     let partTypeValue = document.getElementById("candPartType").value;
     let partCountValue = Number(document.getElementById("candPartCount").value)
 
-    if( partTypeValue !== "-999" ){
+    if( partTypeValue !== "-999"){
+      
+        if(partTypeValue==="kids" && !kidsAgeCheck()){
+            showErrorMsg("Sorry your not a kid anymore!")
+            return;
+        }
+        
       if(partCountValue > 0 && partCountValue < 9){
         if(musicSelected || artSelected || danceSelected){
           let categoryCount = 0;
@@ -265,12 +320,13 @@
   })
 })();
 
-var nameRegex = /^[a-zA-Z]+([ '-][a-zA-Z]+)*$/;
-var mobileNumberRegex = /^[6-9]\d{9}$/;
-var emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-var instagramUrlRegex = /^https?:\/\/(www\.)?instagram\.com\/[a-zA-Z0-9._]{1,30}\/?$/;
-var aadharRegex = /^\d{12}$/;
-var pinCodeRegex = /^[1-9][0-9]{5}$/;
+const nameRegex = /^[a-zA-Z]+([ '-][a-zA-Z]+)*$/;
+const mobileNumberRegex = /^[6-9]\d{9}$/;
+const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+const instagramUrlRegex = /^https?:\/\/(www\.)?instagram\.com\/[a-zA-Z0-9._]{1,30}\/?$/;
+const instagramIdRegex = /^(?=.{1,30}$)[a-zA-Z0-9._]+$/;
+const aadharRegex = /^\d{12}$/;
+const pinCodeRegex = /^[1-9][0-9]{5}$/;
 
 function showBasicError(errMsg,display="block",boxId="messageBasic"){
 
@@ -304,7 +360,7 @@ function validBasicDetails(screenName) {
     showBasicError("Select a gender!")
     return false;
   }else if(candidDob==="" || !calculateAge(candidDob)){
-    showBasicError("Select a date and your age should be above 12!")
+    showBasicError("Select a date and your age should be above 3!")
     return false;
   }else if(candBloodGroup==="-999"){
     showBasicError("Select a blood group!")
@@ -339,7 +395,7 @@ function validateContact(screenName){
   }else if(!emailRegex.test(candEmail)){
     showBasicError("Enter a proper email id","block","messageContact")
     return false;
-  }else if(!instagramUrlRegex.test(candInstagram)){
+  }else if(!instagramIdRegex.test(candInstagram)){
     showBasicError("Enter a proper instagram id","block","messageContact")
     return false;
   }else if(!aadharRegex.test(candAadharCard)){
@@ -402,7 +458,7 @@ function calculateAge(dobValue){
   }
 
   // console.log('Difference in years: ' + diffInYears);
-  if(diffInYears>=12){
+  if(diffInYears>=3){
     return true;
   }else{
     return false;
@@ -441,7 +497,7 @@ function changeSteps(showScreen){
         formIndicator.innerHTML = "Step 3 / 4"
         break;
       case "participation_details":
-        formIllustration.style.setProperty('background-image', `url('${base_illus_url}payment_step.jpg')`, 'important');
+        formIllustration.style.setProperty('background-image', `url('${base_illus_url}event_details.jpg')`, 'important');
         formIndicator.innerHTML = "Step 4 / 4"
         break;
       case "form_success":
