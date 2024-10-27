@@ -100,7 +100,7 @@
   const utrRegex = /^\d{12}$/;
 
   const base_url = "https://gurushishya.in/"
-//   const base_url = "http://localhost:8080/"
+  // const base_url = "http://localhost:8080/"
 
   function finalBtnAction() {
   
@@ -378,7 +378,46 @@ function validBasicDetails(screenName) {
 
 }
 
-function validateContact(screenName){
+async function checkEmailAadhar(allValuesJson){
+
+  const base_url = "https://gurushishya.in/"
+  // const base_url = "http://localhost:8080/"
+  let response = await fetch(`${base_url}participation/check-unique-mail/`, {
+    method: 'POST', // Specify the HTTP method
+    headers: {
+        'Content-Type': 'application/json', // Ensure server expects JSON
+        'Accept': 'application/json' // Indicates client expects JSON response
+    },
+    body: JSON.stringify(allValuesJson) // Convert your data to JSON format
+  })
+  .then(response => {
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    return response.text(); // For debugging
+  })
+  .then(text => {
+    console.log('Response Text:', text);
+    const json = text ? JSON.parse(text) : {}; // Handle empty response
+    console.log('Parsed JSON:', json);
+    let userExisting = json["success"]
+    if(!userExisting){
+      showBasicError(json["message"],"block","messageContact")
+    }
+    return userExisting
+  })
+  .catch(error => {
+    showBasicError("Technical Issue, Try Again Later !","block","messageContact")
+    console.log("error:",error)
+    return false
+  });
+
+  console.log("unique response:",response)
+  return response
+  // return false
+}
+
+async function validateContact(screenName){
 
   if(screenName!=="contact_details"){
     return false;
@@ -388,6 +427,11 @@ function validateContact(screenName){
   let candEmail = document.getElementById("candEmail").value
   let candInstagram = document.getElementById("candInstagram").value
   let candAadharCard = document.getElementById("candAadharCard").value
+
+  let bodyJson = {
+    "entryAadharCard":candAadharCard,
+    "entryEmail":candEmail,
+  }
 
   if(!mobileNumberRegex.test(candMobile)){
     showBasicError("Enter a proper mobile number","block","messageContact")
@@ -400,6 +444,8 @@ function validateContact(screenName){
     return false;
   }else if(!aadharRegex.test(candAadharCard)){
     showBasicError("Enter a proper aadhar number","block","messageContact")
+    return false;
+  }else if(await checkEmailAadhar(bodyJson) == false){
     return false;
   }else{
     showBasicError("","none","messageContact")
@@ -522,11 +568,11 @@ function goToPage(newLocation){
   window.location.href = newLocation
 }
 
-function buttonActions(showScreen,destroyScreen,backBtn=false){
+async function buttonActions(showScreen,destroyScreen,backBtn=false){
 
   let validFlag = false;
 
-  if(validBasicDetails(destroyScreen) || validateContact(destroyScreen) || validateResidential(destroyScreen)){
+  if(validBasicDetails(destroyScreen) || await validateContact(destroyScreen) || validateResidential(destroyScreen)){
     validFlag = true;
   }
   
