@@ -83,7 +83,7 @@ function convertJsonFormData(obj) {
   const formData = new URLSearchParams();
 
   Object.keys(obj).forEach(key => {
-      console.log(`${key}: ${obj[key]}`);
+      // console.log(`${key}: ${obj[key]}`);
     formData.append(key, obj[key]);
   });
 
@@ -129,13 +129,13 @@ function finalBtnAction() {
     return response.text(); // For debugging
   })
   .then(text => {
-    console.log('Response Text:', text);
+    // console.log('Response Text:', text);
     const json = text ? JSON.parse(text) : {}; // Handle empty response
-    console.log('Parsed JSON:', json);
+    // console.log('Parsed JSON:', json);
     changeSteps("form_success")
   })
   .catch(error => {
-    console.log("error:",error)
+    // console.log("error:",error)
     changeSteps("form_failure")
   });
 
@@ -156,7 +156,7 @@ document.querySelector("#candPartType").addEventListener('change',function(){
 // Add event listeners for each event type
 inputNumberEvents.forEach(function(event) {
   inputCount.addEventListener(event, function() {
-      console.log('Button triggered by ' + event + ' event!');
+      // console.log('Button triggered by ' + event + ' event!');
       startCalcProcess()
   });
 });
@@ -192,7 +192,7 @@ function kidsAgeCheck(){
       diffInYears--;
   }
 
-  console.log('Kids Check ' + diffInYears);
+  // console.log('Kids Check ' + diffInYears);
   if(diffInYears>=3 && diffInYears<12){
       return true;
   }else{
@@ -397,9 +397,9 @@ let response = await fetch(`${base_url}participation/check-unique-mail/`, {
   return response.text(); // For debugging
 })
 .then(text => {
-  console.log('Response Text:', text);
+  // console.log('Response Text:', text);
   const json = text ? JSON.parse(text) : {}; // Handle empty response
-  console.log('Parsed JSON:', json);
+  // console.log('Parsed JSON:', json);
   let userExisting = json["success"]
   if(!userExisting){
     showBasicError(json["message"],"block","messageContact")
@@ -408,11 +408,11 @@ let response = await fetch(`${base_url}participation/check-unique-mail/`, {
 })
 .catch(error => {
   showBasicError("Technical Issue, Try Again Later !","block","messageContact")
-  console.log("error:",error)
+  // console.log("error:",error)
   return false
 });
 
-console.log("unique response:",response)
+// console.log("unique response:",response)
 return response
 // return false
 }
@@ -522,23 +522,19 @@ let successDiv = document.getElementById("success-result")
 let failureDiv = document.getElementById("failure-result")
 let classBlockValue = "row w-100 p-2 d-block"
 
-console.log("showIng:",showScreen,formIllustration.style.backgroundImage)
+// console.log("showIng:",showScreen,formIllustration.style.backgroundImage)
 
 switch(showScreen){
   
   case "basic_details":
-    // formIllustration.style.backgroundImage = `url('${base_illus_url}basic_details.jpg')`
     formIllustration.style.setProperty('background-image', `url('${base_illus_url}basic_details.jpg')`, 'important');
     formIndicator.innerHTML = "Step 1 / 4"
     break;
   case "contact_details":
-    console.log(`url('${base_illus_url}contact_details.jpg')`)
-    // formIllustration.style.backgroundImage = `"url('${base_illus_url}contact_details.jpg')"`
     formIllustration.style.setProperty('background-image', `url('${base_illus_url}contact_details.jpg')`, 'important');
     formIndicator.innerHTML = "Step 2 / 4"
     break;
   case "residential_details":
-      // formIllustration.style.backgroundImage = `"url('${base_illus_url}address_details.jpg')"`
       formIllustration.style.setProperty('background-image', `url('${base_illus_url}address_details.jpg')`, 'important');
       formIndicator.innerHTML = "Step 3 / 4"
       break;
