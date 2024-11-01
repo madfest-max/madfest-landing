@@ -99,7 +99,7 @@ function convertJsonFormData(obj) {
 
 const utrRegex = /^\d{12}$/;
 
-const base_url = "https://gurushishya.in/"
+const base_url = "https://api.madfest.in/"
 // const base_url = "http://localhost:8080/"
 
 function finalBtnAction() {
@@ -380,7 +380,7 @@ if(!nameRegex.test(firstName)){
 
 async function checkEmailAadhar(allValuesJson){
 
-const base_url = "https://gurushishya.in/"
+const base_url = "https://api.madfest.in/"
 // const base_url = "http://localhost:8080/"
 let response = await fetch(`${base_url}participation/check-unique-mail/`, {
   method: 'POST', // Specify the HTTP method
