@@ -291,12 +291,59 @@
 
             </form>
             
+            <div id="payment-gateway" class="row w-100 p-2 d-none">
+              <h3>Checkout Section</h3>
+              <div class="form-group mt-3">
+                <label for="payuFirstName">First Name</label>
+                <input type="text" class="form-control" name="displayFirstName" id="displayFirstName" disabled>
+              </div>
+
+              <div class="form-group mt-3">
+                <label for="payuEmailId">Email ID</label>
+                <input type="text" class="form-control" name="displayEmailId" id="displayEmailId" disabled>
+              </div>
+
+              <div class="form-group mt-3">
+                <label for="payuFinalAmt">Total Pay</label>
+                <input type="number" class="form-control" name="displayFinalAmt" id="displayFinalAmt" disabled>
+              </div>
+
+              <form action="https://secure.payu.in/_payment" method="POST">
+                <!-- Replace with https://secure.payu.in/_payment for production -->
+        
+                <!-- Required Fields -->
+                <input type="hidden" name="key" value="RaU5vB">
+                <input id="payuTransId" type="hidden" name="txnid" value="TXN12345678">
+                <input id="payuFinalAmount" type="hidden" name="amount" value="10.00">
+                <input type="hidden" name="productinfo" value="MadFest Event Ticket Booking">
+                <input id="payuFirstName" type="hidden" name="firstname" value="Anirudh">
+                <input id="payuEmailId" type="hidden" name="email" value="draptorteam@gmail.com">
+        
+                <!-- Your Salt and Generated Hash -->
+                <input id="payuMadfestHash" type="hidden" name="hash" value="GENERATED_HASH">
+                <input id="payuMobileNum" type="hidden" name="phone" value="8971356468"><br><br>
+        
+                <!-- Redirect URLs -->
+                <!-- <input type="hidden" name="surl" value="http://localhost:8080/payu/success">
+                  <input type="hidden" name="furl" value="http://localhost:8080/payu/failure"> -->
+
+                  <input type="hidden" name="surl" value="https://api.madfest.in/payu/success">
+                  <input type="hidden" name="furl" value="https://api.madfest.in/payu/failure">
+        
+                <div class="d-flex justify-content-between">
+                  <button onclick="buttonActions('participation_details','payment-gateway',true)" class="btn btn-secondary" type="button">Cancel</button>
+                  <button class="btn btn-primary" type="submit">Pay Now</button>
+                </div>
+                
+              </form>
+            </div>
+
             <div id="success-result" class="row w-100 p-2 d-none">
               <div class="col-12 d-flex justify-content-center">
                 <img class="register-result" src="./assets/img/form-steps/register_success.png" />
               </div>
               <div class="col-12">
-                <h1>Payment Gateway coming soon!</h1>
+                <!-- <h1>Payment Gateway coming soon!</h1> -->
                 <p class="text-success text-center py-5">
                   Thank you for registering with us. 
                   Once your details are verified, you will receive a 
@@ -351,9 +398,9 @@
               <p><strong>Email:</strong> <span>support@madfest.in</span></p>
             </div>
             <div class="social-links d-flex mt-4">
-              <a href=""><i class="bi bi-twitter-x"></i></a>
-              <a href=""><i class="bi bi-facebook"></i></a>
-              <a href=""><i class="bi bi-instagram"></i></a>
+              <a href=""><i class="bi bi-youtube"></i></a>
+              <a href="" target="_blank"><i class="bi bi-facebook"></i></a>
+              <a href="https://www.instagram.com/madfest.in" target="_blank"><i class="bi bi-instagram"></i></a>
               <a href=""><i class="bi bi-linkedin"></i></a>
             </div>
           </div>
@@ -372,18 +419,18 @@
             <ul>
               <li><i class="bi bi-chevron-right"></i> <a href="./term-service.html"> Terms Of Service</a></li>
               <li><i class="bi bi-chevron-right"></i> <a href="./privacy-policy.html"> Privacy Policy</a></li>
-              <li><i class="bi bi-chevron-right"></i> <a href="#"> Refund Policy</a></li>
+              <li><i class="bi bi-chevron-right"></i> <a href="./refund-policy.html"> Refund Policy</a></li>
             </ul>
           </div>
 
           <div class="col-lg-4 col-md-12 footer-newsletter">
             <h4>Our Newsletter</h4>
             <p>Subscribe to our newsletter and receive the latest news about our events and services!</p>
-            <form action="forms/newsletter.php" method="post" class="php-email-form">
-              <div class="newsletter-form"><input type="email" name="email"><input type="submit" value="Subscribe"></div>
-              <div class="loading">Loading</div>
-              <div class="error-message"></div>
-              <div class="sent-message">Your subscription request has been sent. Thank you!</div>
+            <form action="#" id="madfestSubscription" class="php-email-form">
+              <div class="newsletter-form"><input type="email" name="subscribeMailId" required><input id="subscribeSubmit" type="submit" value="Subscribe" /></div>
+              <div id="newsletterLoader" class="loading">Loading</div>
+              <div id="newsLetterError" class="error-message"></div>
+              <div id="newsLetterSuccess" class="sent-message">Your subscription request has been sent. Thank you!</div>
             </form>
           </div>
 
@@ -414,7 +461,6 @@
 
   <!-- Vendor JS Files -->
   <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script src="assets/vendor/php-email-form/validate.js"></script>
   <script src="assets/vendor/aos/aos.js"></script>
   <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
   <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
@@ -424,6 +470,7 @@
 
   <!-- Main JS File -->
   <script src="assets/js/main.js"></script>
+  <script src="assets/js/subscribe.js"></script>
   <script src="assets/js/register.js"></script>
   <script src="assets/js/cities.js"></script>
   <script language="javascript">print_state("candAddressState");</script>

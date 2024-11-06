@@ -1,7 +1,7 @@
 (function() {
   "use strict";
 
-  var musicSelected = false;
+var musicSelected = false;
 var artSelected = false;
 var danceSelected = false;
 var totalPrice = 0.00;
@@ -72,7 +72,6 @@ function gatherAllForm(){
     "entryCount":partCountValue,
     "entryCategory":categoryArr,
     "entryAmount":partTotalAmount,
-    "entryUtrNumber":partUtrNumber,
   }
 
   return convertJsonFormData(finalJson)
@@ -102,17 +101,93 @@ const utrRegex = /^\d{12}$/;
 const base_url = "https://api.madfest.in/"
 // const base_url = "http://localhost:8080/"
 
+function genTransId(){
+  const timeStamp = new Date().getTime()
+  const randomNum = Math.floor(Math.random() * 1000000)
+  const merchantPrefix = "MDFT24"
+  const transactionID = `${merchantPrefix}${timeStamp}${randomNum}`
+  return transactionID;
+}
+
+function fetchHashCode(params){
+
+  let userTransactionId = genTransId()
+
+  const hashData = new URLSearchParams();
+
+  hashData.append("userName",params.userName)
+  hashData.append("userEmail",params.userEmail)
+  hashData.append("userAmount",params.userAmount)
+  hashData.append("transactionId",userTransactionId)
+  
+  fetch(`${base_url}payu/hash`,{
+    method: 'POST', // Specify the HTTP method
+    headers: {
+        'Content-Type': 'application/x-www-form-urlencoded' // Important
+    },
+    body: hashData // Convert your data to JSON format
+  })
+  .then(response => {
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    return response.text(); // For debugging
+  })
+  .then(text => {
+    // console.log('Response Text:', text);
+    const json = text ? JSON.parse(text) : {}; // Handle empty response
+    // console.log('Parsed JSON:', json);
+    console.log("Hash Response: ",json)
+    paymentAction(params,json)
+  })
+  .catch((error)=>{
+    console.log("Hash Error: ",error)
+  })
+
+}
+
+function paymentAction(params,response){
+
+  let displayName = document.getElementById("displayFirstName")
+  let displayEmail = document.getElementById("displayEmailId")
+  let displayAmount = document.getElementById("displayFinalAmt")
+
+  let payFinalAmt = document.getElementById("payuFinalAmount")
+  let payFirstName = document.getElementById("payuFirstName")
+  let payEmailId = document.getElementById("payuEmailId")
+  let payuMobileNum = document.getElementById("payuMobileNum")
+
+  let payTransactionId = document.getElementById("payuTransId")
+  let payTransactionHash = document.getElementById("payuMadfestHash")
+
+  payTransactionHash.value = response.hash
+  payTransactionId.value = response.transactionId
+
+  displayName.value = params.userName
+  displayEmail.value = params.userEmail
+  displayAmount.value = params.userAmount
+
+  payFinalAmt.value = params.userAmount
+  payFirstName.value = params.userName
+  payEmailId.value = params.userEmail
+  payuMobileNum.value = params.userMobile
+
+  changeSteps("checkout-page")
+}
+
 function finalBtnAction() {
 
-  let utrValue = document.getElementById("candUtrNumber").value
-
-  // if(utrValue == "" || !utrRegex.test(utrValue)){
-  //   showErrorMsg("Enter a valid utr number",false)
-  //   return;
-  // }
-
   let allValuesJson = gatherAllForm()
-  // console.log("all:",allValuesJson)
+  console.log("all:",allValuesJson)
+  // return;
+
+  let hashjson = {
+    "userName":allValuesJson.get("entryFirstName"),
+    "userEmail":allValuesJson.get("entryEmail"),
+    "userAmount":Number(allValuesJson.get("entryAmount")).toFixed(2),
+    "userMobile":allValuesJson.get("entryMobile")
+  }
+
   // return;
 
   fetch(`${base_url}participation/`, {
@@ -132,7 +207,13 @@ function finalBtnAction() {
     // console.log('Response Text:', text);
     const json = text ? JSON.parse(text) : {}; // Handle empty response
     // console.log('Parsed JSON:', json);
-    changeSteps("form_success")
+    if(allValuesJson.get("entryType")==="kids" && Number(allValuesJson.get("entryAmount")).toFixed(2)==="0.00"){
+      // console.log("I am a kid")
+      changeSteps("form_success")
+    }else{
+      fetchHashCode(hashjson)
+    }
+      
   })
   .catch(error => {
     // console.log("error:",error)
@@ -520,6 +601,7 @@ let formIndicator = document.getElementById("form-steps-indicator")
 let finalFieldSet = document.getElementById("participation_details")
 let successDiv = document.getElementById("success-result")
 let failureDiv = document.getElementById("failure-result")
+let checkout_page = document.getElementById("payment-gateway")
 let classBlockValue = "row w-100 p-2 d-block"
 
 // console.log("showIng:",showScreen,formIllustration.style.backgroundImage)
@@ -541,6 +623,12 @@ switch(showScreen){
     case "participation_details":
       formIllustration.style.setProperty('background-image', `url('${base_illus_url}event_details.jpg')`, 'important');
       formIndicator.innerHTML = "Step 4 / 4"
+      break;
+    case "checkout-page":
+      formIllustration.style.setProperty('background-image', `url('${base_illus_url}payment_session.jpg')`, 'important');
+      finalFieldSet.className = "d-none"
+      formIndicator.innerHTML = "Payment Page"
+      checkout_page.className = classBlockValue;
       break;
     case "form_success":
       formIllustration.style.setProperty('background-image', `url('${base_illus_url}final_step.jpg')`, 'important');
