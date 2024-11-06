@@ -1,8 +1,21 @@
+const post_base_url = "https://api.madfest.in/"
+// const post_base_url = "http://localhost:8080/"
 const newsForm = document.querySelector("#madfestSubscription")
 const subscribeLoader = document.getElementById("newsletterLoader")
 const subscribeErr = document.getElementById("newsLetterError")
 const subscribeSuccess = document.getElementById("newsLetterSuccess")
 const newsLetterSubmit = document.getElementById("subscribeSubmit")
+
+function fetchFormData(form){
+
+  const formData = new FormData(form);
+  const exportData = new URLSearchParams();
+
+  formData.forEach((value,key)=>{exportData.append(key,value)});
+
+  return exportData;
+
+}
 
 function displayNewsResult(useCase){
 
@@ -33,10 +46,10 @@ newsForm.addEventListener('submit',(event)=>{
 
     subscribeLoader.style.display = "block";
 
-    let formValues = getFormValues(newsForm)
+    let formValues = fetchFormData(newsForm)
     // console.log("Form:",formValues)
     
-    let messagePostUrl = `${base_url}subscription/`
+    let messagePostUrl = `${post_base_url}subscription/`
 
     fetch(messagePostUrl, {
         method: 'POST', // Specify the HTTP method
